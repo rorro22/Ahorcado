@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: ahorcado
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: gunicorn ahorcado.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: ahorcado.settings
+      - key: PYTHON_VERSION
+        value: "3.10"
