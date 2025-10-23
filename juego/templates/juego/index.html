@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        #particles-js {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        }
+    </style>
+
+    <meta charset="UTF-8">
+    <title>Juego del Ahorcado</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="contenedor">
+        <h1>Juego del Ahorcado</h1>
+
+        <!-- Dibujo del ahorcado -->
+        <pre class="ascii">{{ ascii }}</pre>
+
+        <!-- Estado del juego -->
+        <p><strong>Palabra:</strong> {{ espacios }}</p>
+        <p><strong>Errores:</strong> {{ errores }}</p>
+        <p><strong>Letras usadas:</strong> {{ letras_usadas }}</p>
+
+        <!-- Lógica de victoria o derrota -->
+        {% if terminado %}
+            <h2>🎉 ¡Felicidades! Adivinaste la palabra.</h2>
+            
+            <!-- 🔁 Botón de reinicio -->
+            <form action="{% url 'reiniciar' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="boton-reiniciar">Jugar otra vez</button>
+            </form>
+
+        {% elif perdido %}
+            <h2>💀 ¡Perdiste! La palabra era: <span>{{ palabra }}</span></h2>
+
+            <!-- 🔁 Botón de reinicio -->
+            <form action="{% url 'reiniciar' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="boton-reiniciar">Intentar otra vez</button>
+            </form>
+
+        {% else %}
+            <!-- Formulario para ingresar letras -->
+            <form method="post">
+                {% csrf_token %}
+                <input type="text" name="letra" maxlength="1" required autofocus>
+                <button type="submit">Adivinar</button>
+            </form>
+        {% endif %}
+    </div>
+    <script>
+        particlesJS('particles-js', {
+        particles: {
+            number: { value: 80 },
+            color: { value: "#ffffff" },
+            shape: { type: "circle" },
+            opacity: { value: 0.5 },
+            size: { value: 3 },
+            line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#ffffff",
+            opacity: 0.4,
+            width: 1
+            },
+            move: {
+            enable: true,
+            speed: 2
+            }
+        },
+        interactivity: {
+            detect_on: "canvas",
+            events: {
+            onhover: { enable: true, mode: "repulse" },
+            onclick: { enable: true, mode: "push" }
+            },
+            modes: {
+            repulse: { distance: 100 },
+            push: { particles_nb: 4 }
+            }
+        },
+        retina_detect: true
+        });
+    </script>
+
+    <footer class="footer-contacto">
+    <h3>Contáctame</h3>
+    <ul>
+        <li><a href="https://github.com/rorro22" target="_blank">🐙 GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/suspect/" target="_blank">💼 LinkedIn</a></li>
+        <li><a href="mailto:rodrigo.valdes_suspect@outlook.com">📧 Email</a></li>
+    </ul>
+</footer>
+
+</body>
+</html>
